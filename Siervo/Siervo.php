@@ -40,29 +40,30 @@ class Siervo{
         $routes = $this->_getRouteArray();
         $requestUri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(self::$_rPATH));
         $requestUriArray = explode('/', $requestUri);
+        $notFound = false;
         foreach($routes as $route => $callback):
             $route = explode('/', $route);
-            $aux = true;
+            $urlsMatch = true;
+            $notFound = false;
             $args = array();
-            foreach($route as $i => $part):
-                if(substr($part, 0, 1) === ':'):
-                    $args[] = $requestUriArray[$i];
-                elseif($part !== $requestUriArray[$i]):
-                    // este caso: http://localhost/siervo-project/hola/juli/tata
-                    // para esta definicion: /hola/:name no anda!
-                    $aux = false;
+            if(count($route) === count($requestUriArray)):
+                foreach($requestUriArray as $i => $part):
+                    if(substr($route[$i], 0, 1) === ':'):
+                        $args[] = $part;
+                    elseif($part !== $route[$i]):
+                        $urlsMatch = false;
+                        break;
+                    endif;
+                endforeach;
+                if($urlsMatch):
+                    $callback->bindTo($this, __CLASS__);
+                    call_user_func_array($callback, $args);
+                    $notFound = true;
                     break;
                 endif;
-            endforeach;
-            $auxT = false;
-            if($aux):
-                $callback->bindTo($this, __CLASS__);
-                call_user_func_array($callback, $args);
-                $auxT = true;
-                break;
             endif;
         endforeach;
-        if(!$auxT):
+        if(!$notFound):
             echo 'No se encontro la url solicitada..';
         endif;
     }
