@@ -38,9 +38,33 @@ class Siervo{
      */
     public function run(){
         $routes = $this->_getRouteArray();
+        $requestUri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(self::$_rPATH));
+        $requestUriArray = explode('/', $requestUri);
         foreach($routes as $route => $callback):
-            echo "\n".$route;
+            $route = explode('/', $route);
+            $aux = true;
+            $args = array();
+            foreach($route as $i => $part):
+                if(substr($part, 0, 1) === ':'):
+                    $args[] = $requestUriArray[$i];
+                elseif($part !== $requestUriArray[$i]):
+                    // este caso: http://localhost/siervo-project/hola/juli/tata
+                    // para esta definicion: /hola/:name no anda!
+                    $aux = false;
+                    break;
+                endif;
+            endforeach;
+            $auxT = false;
+            if($aux):
+                $callback->bindTo($this, __CLASS__);
+                call_user_func_array($callback, $args);
+                $auxT = true;
+                break;
+            endif;
         endforeach;
+        if(!$auxT):
+            echo 'No se encontro la url solicitada..';
+        endif;
     }
 
     /**
@@ -255,5 +279,7 @@ class Siervo{
         var_dump(self::$_PATH);
         var_dump(self::$_rPATH);
         var_dump(self::$_ENV);
+        var_dump(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        var_dump(array_slice(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), count(explode('/', self::$_rPATH))));
     }
 }
