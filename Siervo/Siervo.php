@@ -16,6 +16,7 @@ class Siervo{
 
     public static $_PATH;
     public static $_ENV;
+    public static $_rPATH;
 
 	private $getRoutes;
 	private $postRoutes;
@@ -25,7 +26,8 @@ class Siervo{
 
     public function __construct(){
         $this->setEnv();
-        $this->setSiervoPath();
+        $this->setPath();
+        $this->setRPath();
     }
 
     /**
@@ -42,16 +44,28 @@ class Siervo{
     }
 
     /**
-     * Set Siervo Path
+     * Set Path
      *
      * Setea el path absoluto donde se encuentra Siervo,
      * y desde ahí setea la raiz de importación.
      *
-     * @param string $siervoPath
+     * @param string $path
      */
-    public function setSiervoPath($siervoPath = ''){
-        self::$_PATH = ($siervoPath === '') ? dirname(dirname(__FILE__)) : $siervoPath;
+    public function setPath($path = ''){
+        self::$_PATH = ($path === '') ? dirname(dirname(__FILE__)) : $path;
         ini_set('include_path', self::$_PATH);
+    }
+
+    /**
+     * Set R Path
+     *
+     * Setea el path relativo donde se ejecuta el
+     * srcipt de inicio.
+     *
+     * @param string $rpath
+     */
+    public function setRPath($rpath = ''){
+        self::$_rPATH = ($rpath === '') ? dirname($_SERVER['SCRIPT_NAME']) : $rpath;
     }
 
     /**
@@ -214,6 +228,15 @@ class Siervo{
 		return $requestMethod;
 	}
 
+    /**
+     * _Get Route Array
+     *
+     * Retorna el array de routes a utilizar
+     * dependiendo de método de la petición.
+     *
+     * @return mixed
+     * @throws Exception
+     */
     private function _getRouteArray(){
         switch($this->getRequestMethod()):
             case 'GET':
@@ -230,6 +253,7 @@ class Siervo{
     public function test()
     {
         var_dump(self::$_PATH);
+        var_dump(self::$_rPATH);
         var_dump(self::$_ENV);
     }
 }
