@@ -14,8 +14,19 @@ use Exception;
 
 class Siervo{
 
+    /**
+     * @var string path absoluto donde se encuentra Siervo.
+     */
     public static $_PATH;
+
+    /**
+     * @var string nombre del entorno seteado.
+     */
     public static $_ENV;
+
+    /**
+     * @var string string path relativo donde se ecuentra Siervo.
+     */
     public static $_rPATH;
 
 	private $getRoutes;
@@ -24,7 +35,15 @@ class Siervo{
 	private	$deleteRoutes;
 	private $auxRoute;
 
+    /**
+     * @var array() Contiene los distintos
+     * entornos registrados (key) y su
+     * comportamiento asociado mediante callback (value).
+     */
+    private $environments;
+
     public function __construct(){
+        $this->setDefaultEnv();
         $this->setEnv();
         $this->setPath();
         $this->setRPath();
@@ -99,26 +118,47 @@ class Siervo{
      * Setea el tipo de entorno de desarrollo.
      *
      * @param string $env
+     */
+    public function setEnv($env = 'development'){
+        foreach($this->environments as $envName => $callback):
+            if($envName === $env && is_callable($callback)):
+                $callback();
+                self::$_ENV = $env;
+                break;
+            endif;
+        endforeach;
+    }
+
+    /**
+     * Environment
+     *
+     * Define un entorno de desarrollo y asocia un
+     * compoortamiento mediante una callback al mismo.
+     *
+     * @param string $env
      * @param null $callback
      */
-    public function setEnv($env = 'development', $callback = null){
-        self::$_ENV = $env;
-        if($callback === null):
-            switch($env):
-                case 'development':
-                    ini_set('error_reporting', E_ALL | E_STRICT | E_NOTICE);
-                    ini_set('display_errors', 'On');
-                    ini_set('track_errors', 'On');
-                    break;
-                case 'production':
-                    ini_set('display_errors', 'Off');
-                    break;
-            endswitch;
-        else:
-            if(is_callable($callback)):
-                $callback();
-            endif;
-        endif;
+    public function environment($env = '', $callback = null){
+        $this->environments[$env] = $callback;
+    }
+
+    /**
+     * Set Default Env
+     *
+     * Setea por defecto dos entornos de desarrollo
+     * basicos, development y production, los mismos
+     * se pueden reescribir.
+     *
+     */
+    private function setDefaultEnv(){
+        $this->environment('development', function(){
+            ini_set('error_reporting', E_ALL | E_STRICT | E_NOTICE);
+            ini_set('display_errors', 'On');
+            ini_set('track_errors', 'On');
+        });
+        $this->environment('production', function(){
+            ini_set('display_errors', 'Off');
+        });
     }
 
     /**
