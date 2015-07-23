@@ -118,15 +118,19 @@ class Siervo{
      * Setea el tipo de entorno de desarrollo.
      *
      * @param string $env
+     * @return bool
      */
     public function setEnv($env = 'development'){
-        foreach($this->environments as $envName => $callback):
-            if($envName === $env && is_callable($callback)):
+        $ok = array_key_exists($env, $this->environments);
+        if($ok):
+            $callback = $this->environments[$env];
+            $ok = is_callable($callback);
+            if($ok):
                 $callback();
                 self::$_ENV = $env;
-                break;
             endif;
-        endforeach;
+        endif;
+        return $ok;
     }
 
     /**
@@ -313,14 +317,5 @@ class Siervo{
             case 'DELETE':
                 return $this->deleteRoutes;
         endswitch;
-    }
-
-    public function test()
-    {
-        var_dump(self::$_PATH);
-        var_dump(self::$_rPATH);
-        var_dump(self::$_ENV);
-        var_dump(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        var_dump(array_slice(explode('/', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), count(explode('/', self::$_rPATH))));
     }
 }

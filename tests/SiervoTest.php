@@ -25,13 +25,14 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSetEnv(){
-        $this->app->setEnv();
+        $this->assertTrue($this->app->setEnv());
         $this->assertEquals('development', Siervo::$_ENV);
         $this->app->setEnv('production');
         $this->assertEquals('production', Siervo::$_ENV);
         $this->app->environment('lalala', function(){return null;});
         $this->app->setEnv('lalala');
         $this->assertEquals('lalala', Siervo::$_ENV);
+        $this->assertFalse($this->app->setEnv('lololo'));
     }
 
     public function testSetPath(){
