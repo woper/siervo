@@ -17,7 +17,7 @@ class Router {
     public $currentRoute;
 
     /**
-     * @var [][] ej.: [requestType][route] = callback.
+     * @var [][] ej.: [requestMethod][route] = callback.
      */
     private $routes;
 
@@ -89,16 +89,16 @@ class Router {
      * Agrega una ruta dependiendo de como se llame.
      *
      * @param $args
-     * @param $requestType
+     * @param $requestMethod
      * @return $this|null
      */
-    private function addRoute($args, $requestType){
+    private function addRoute($args, $requestMethod){
         switch(count($args)):
             case 1:
-                $this->setArrayRoute($this->currentRoute, $args[0], $requestType);
+                $this->setArrayRoute($this->currentRoute, $args[0], $requestMethod);
                 return $this;
             case 2:
-                $this->setArrayRoute($args[0], $args[1], $requestType);
+                $this->setArrayRoute($args[0], $args[1], $requestMethod);
                 return null;
             default:
                 return false;
@@ -113,10 +113,10 @@ class Router {
      *
      * @param $key
      * @param $callback
-     * @param $requestType
+     * @param $requestMethod
      */
-    private function setArrayRoute($key, $callback, $requestType){
-        $this->routes[$requestType][$key] = $callback;
+    private function setArrayRoute($key, $callback, $requestMethod){
+        $this->routes[$requestMethod][$key] = $callback;
     }
 
     /**
@@ -126,13 +126,13 @@ class Router {
      * las rutas registradas para un tipo de
      * request especifico.
      *
-     * @param $requestType
+     * @param $requestMethod
      * @return bool
      */
-    public function getRoutes($requestType){
+    public function getRoutes($requestMethod){
         $result = false;
-        if(array_key_exists($requestType, $this->routes)):
-            $result = $this->routes[$requestType];
+        if(array_key_exists($requestMethod, $this->routes)):
+            $result = $this->routes[$requestMethod];
         endif;
         return $result;
     }
