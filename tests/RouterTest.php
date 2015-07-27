@@ -11,7 +11,7 @@ namespace tests;
 use Siervo\Router;
 use Siervo\Siervo;
 
-require_once '../Siervo/Siervo.php';
+require_once 'Siervo/Siervo.php';
 
 class RouterTest extends \PHPUnit_Framework_TestCase {
 
