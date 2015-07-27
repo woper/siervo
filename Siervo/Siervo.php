@@ -12,7 +12,6 @@ namespace Siervo;
 
 use Exception;
 
-require 'Router.php';
 
 class Siervo{
 
@@ -232,6 +231,24 @@ class Siervo{
 	public function delete(){
 		return call_user_func_array(array($this->router, 'delete'), func_get_args());
 	}
+
+    /**
+     * Register Autoload
+     *
+     * Registra la función de autoload de siervo,
+     * si se siguen ciertos lineamientos también
+     * puede servir para importar de forma automática
+     * archivos creados por el usuario.
+     *
+     */
+    public static function registerAutoload(){
+        spl_autoload_register(function($class){
+            $fileDir = dirname(__DIR__)."/".str_replace('\\', '/', $class).'.php';
+            if($fileDir):
+                require $fileDir;
+            endif;
+        });
+    }
 
     /**
      * Get Request Method

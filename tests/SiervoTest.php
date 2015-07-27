@@ -21,6 +21,7 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
     private $app;
 
     public function setUp(){
+        Siervo::registerAutoload();
         $this->app = new Siervo();
     }
 

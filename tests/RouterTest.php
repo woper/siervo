@@ -9,8 +9,9 @@
 namespace tests;
 
 use Siervo\Router;
+use Siervo\Siervo;
 
-require_once '../Siervo/Router.php';
+require_once '../Siervo/Siervo.php';
 
 class RouterTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,6 +21,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
     private $router;
 
     public function setUp(){
+        Siervo::registerAutoload();
         $this->router = new Router();
     }
 

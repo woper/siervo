@@ -1,7 +1,9 @@
 <?php
+use Siervo\Siervo;
 require "Siervo/Siervo.php";
+Siervo::registerAutoload();
+$app = new Siervo();
 
-$app = new \Siervo\Siervo();
 
 $app->get('/', function(){echo "Hola Mundo!";});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
