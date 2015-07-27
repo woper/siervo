@@ -12,6 +12,8 @@ namespace Siervo;
 
 use Exception;
 
+require 'Router.php';
+
 class Siervo{
 
     /**
@@ -29,11 +31,10 @@ class Siervo{
      */
     public static $_rPATH;
 
-	private $getRoutes;
-	private $postRoutes;
-	private	$putRoutes;
-	private	$deleteRoutes;
-	private $auxRoute;
+    /**
+     * @var Router
+     */
+    private $router;
 
     /**
      * @var array() Contiene los distintos
@@ -47,6 +48,7 @@ class Siervo{
         $this->setEnv();
         $this->setPath();
         $this->setRPath();
+        $this->router = new Router();
     }
 
     /**
@@ -168,110 +170,67 @@ class Siervo{
     /**
      * Route
      *
-     * Registra una ruta para encadenar más de
-     * un método de petición (ej: route('/dd')->get(..)->post).
+     * Le comunica al objeto Router que registre una ruta
+     * para encadenar más de un método de petición
+     * (ej: route('/dd')->get(..)->post).
      *
      * @param $route
      * @return $this
      */
 	public function route($route){		
-		$this->auxRoute = $route;
-		return $this;
+		return $this->router->route($route);
 	}
 
     /**
      * Get
      *
-     * Registra una ruta y un comportamiento para esa ruta
+     * Le comunica al objeto Router que registre
+     * una ruta y un comportamiento para esa ruta
      * cuando el request method es GET.
      *
      * @return $this|null|Siervo
      */
 	public function get(){
-		return $this->addRoute(func_get_args(), 'GET');
+		return call_user_func_array(array($this->router, 'get'), func_get_args());
 	}
 
     /**
      * Post
      *
-     * Registra una ruta y un comportamiento para esa ruta
+     * Le comunica al objeto Router que registre
+     * una ruta y un comportamiento para esa ruta
      * cuando el request method es POST.
      *
      * @return $this|null|Siervo
      */
 	public function post(){
-		return $this->addRoute(func_get_args(), 'POST');
+		return call_user_func_array(array($this->router, 'post'), func_get_args());
 	}
 
     /**
      * Put
      *
-     * Registra una ruta y un comportamiento para esa ruta
+     * Le comunica al objeto Router que registre
+     * una ruta y un comportamiento para esa ruta
      * cuando el request method es PUT.
      *
      * @return $this|null|Siervo
      */
 	public function put(){
-		return $this->addRoute(func_get_args(), 'PUT');
+		return call_user_func_array(array($this->router, 'put'), func_get_args());
 	}
 
     /**
      * Delete
      *
-     * Registra una ruta y un comportamiento para esa ruta
+     * Le comunica al objeto Router que registre
+     * una ruta y un comportamiento para esa ruta
      * cuando el request method es DELETE.
      *
      * @return $this|null|Siervo
      */
 	public function delete(){
-		return $this->addRoute(func_get_args(), 'DELETE');
-	}
-
-    /**
-     * Add Route
-     *
-     * Agrega una ruta dependiendo de como se llame.
-     *
-     * @param $args
-     * @param $requestType
-     * @return $this|null
-     */
-	private function addRoute($args, $requestType){
-		switch(count($args)):
-			case 1:
-				$this->setArrayRoute($this->auxRoute, $args[0], $requestType);
-                return $this;
-			case 2:
-				$this->setArrayRoute($args[0], $args[1], $requestType);
-				return null;
-		endswitch;
-	}
-
-    /**
-     * Set Array Route
-     *
-     * Registra una ruta y asocia una callback a la
-     * misma.
-     *
-     * @param $key
-     * @param $callback
-     * @param $requestType
-     */
-	private function setArrayRoute($key, $callback, $requestType){
-		switch($requestType):
-			case 'GET':
-				$this->getRoutes[$key] = $callback;
-				break;
-			case 'POST':
-				$this->postRoutes[$key] = $callback;
-				break;
-			case 'PUT':
-				$this->putRoutes[$key] = $callback;
-				break;
-			case 'DELETE':
-				$this->deleteRoutes[$key] = $callback;
-				break;	
-		endswitch;
+		return call_user_func_array(array($this->router, 'delete'), func_get_args());
 	}
 
     /**
@@ -307,15 +266,6 @@ class Siervo{
      * @throws Exception
      */
     private function _getRouteArray(){
-        switch($this->getRequestMethod()):
-            case 'GET':
-                return $this->getRoutes;
-            case 'POST':
-                return $this->postRoutes;
-            case 'PUT':
-                return $this->putRoutes;
-            case 'DELETE':
-                return $this->deleteRoutes;
-        endswitch;
+        return $this->router->getRoutes($this->getRequestMethod());
     }
 }

@@ -24,5 +24,4 @@ $app->post('/post', function(){echo "POST";});
 $app->put('/put', function(){echo "PUT";});
 $app->delete('/delete', function(){echo "DELETE";});
 
-#$app->test();
 $app->run();
