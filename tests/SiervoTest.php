@@ -49,6 +49,10 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('/', Siervo::$_rPATH);
     }
 
+    public function testRoute(){
+        $this->assertInstanceOf('Siervo\Router', $this->app->route('/prueba'));
+    }
+
     public function testGet(){
         $this->assertNull($this->app->get('/', function(){return null;}));
         $this->assertInstanceOf('Siervo\Router', $this->app->get(function(){return null;}));

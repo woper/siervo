@@ -10,8 +10,15 @@ namespace Siervo;
 
 class Router {
 
+    /**
+     * @var string ruta actual a la que se le
+     * esta asociando comportamiento.
+     */
     public $currentRoute;
 
+    /**
+     * @var [][] ej.: [requestType][route] = callback.
+     */
     private $routes;
 
     /**
@@ -93,7 +100,7 @@ class Router {
             case 2:
                 $this->setArrayRoute($args[0], $args[1], $requestType);
                 return null;
-            case 0:
+            default:
                 return false;
         endswitch;
     }
