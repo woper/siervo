@@ -10,8 +10,6 @@
 
 namespace Siervo;
 
-use Exception;
-
 
 class Siervo{
 
@@ -36,6 +34,11 @@ class Siervo{
     private $router;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var array() Contiene los distintos
      * entornos registrados (key) y su
      * comportamiento asociado mediante callback (value).
@@ -57,9 +60,9 @@ class Siervo{
      *
      */
     public function run(){
-        $routes = $this->_getRouteArray();
-        $requestUri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(self::$_rPATH));
-        $requestUriArray = explode('/', $requestUri);
+        $this->request = new Request();
+        $routes = $this->router->getRoutes($this->request->getMethod());
+        $requestUriArray = $this->request->getUriArray();
         $notFound = false;
         foreach($routes as $route => $callback):
             $route = explode('/', $route);
@@ -248,41 +251,5 @@ class Siervo{
                 require $fileDir;
             endif;
         });
-    }
-
-    /**
-     * Get Request Method
-     *
-     * Retorna el método utilizado con el que el cliente
-     * realiza la petición al servidor.
-     *
-     * @return string
-     * @throws Exception
-     */
-	private function getRequestMethod(){
-		$requestMethod = $_SERVER['REQUEST_METHOD'];
-		if(($requestMethod === 'POST') && (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))):
-			if($_SERVER === 'DELETE'):
-				$requestMethod = 'DELETE';
-			elseif($_SERVER['HTTP_X_HTTP_METHOD'] === 'PUT'):
-				$requestMethod = 'PUT';
-			else:
-				throw new Exception('Unexpected Header');
-			endif;
-		endif;
-		return $requestMethod;
-	}
-
-    /**
-     * _Get Route Array
-     *
-     * Retorna el array de routes a utilizar
-     * dependiendo de método de la petición.
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    private function _getRouteArray(){
-        return $this->router->getRoutes($this->getRequestMethod());
     }
 }

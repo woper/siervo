@@ -63,6 +63,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('/', $this->router->getRoutes('PUT'));
         $this->router->delete('/', function(){return null;});
         $this->assertArrayHasKey('/', $this->router->getRoutes('DELETE'));
-        $this->assertFalse($this->router->getRoutes('TEST'));
+        $this->assertEmpty($this->router->getRoutes('TEST'));
     }
 }

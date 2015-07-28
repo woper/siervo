@@ -15,52 +15,121 @@ class Request {
     /**
      * @var string
      */
-    private $requestUri;
+    private $uri;
 
     /**
      * @var string
      */
-    private $requestMethod;
+    private $method;
+
+    /**
+     * @var array()
+     */
+    private $headers;
 
     /**
      * Constructor
      *
      */
     public function __construct(){
-        $this->requestUri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(Siervo::$_rPATH));
-        $this->setRequestMethod();
+        $this->setUri();
+        $this->setMethod();
+        $this->setHeaders();
     }
 
     /**
-     * Get Request Method
+     * Get Method
      *
-     * retorna el método utilizado con el que el cliente
+     * Retorna el método utilizado con el que el cliente
      * realiza la petición al servidor.
      *
      * @return string
      */
-    private function getRequestMethod(){
-        return $this->requestMethod;
+    public function getMethod(){
+        return $this->method;
     }
 
     /**
-     * Set Request Method
+     * Get Headers
+     *
+     * Retorna un array compuesto de la siguiente
+     * forma 'opcion de cabecera' => 'valor'.
+     *
+     * @return array
+     */
+    public function getHeaders(){
+        return $this->headers;
+    }
+
+    /**
+     * Get Uri
+     *
+     * Retorna la uri a la que se le realizo la
+     * request.
+     *
+     * @return string
+     */
+    public function getUri(){
+        return $this->uri;
+    }
+
+    /**
+     * Get Uri Array
+     *
+     * Retorna la uri a la que se le realizo la
+     * request transformada en un array que
+     * contiene sus partes, se crea con
+     * explode, utilizando / como delimitador
+     * de corte.
+     *
+     * @return array
+     */
+    public function getUriArray(){
+        return explode('/', $this->uri);
+    }
+
+    /**
+     * Set Method
      *
      * Setea el método utilizado con el que el cliente
      * realiza la petición al servidor.
      *
      * @throws Exception
      */
-    private function setRequestMethod(){
-        $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-        if(($$this->requestMethod === 'POST') && (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))):
+    private function setMethod(){
+        $this->method = $_SERVER['REQUEST_METHOD'];
+        if(($this->method === 'POST') && (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))):
             if($_SERVER === 'DELETE'):
-                $this->requestMethod = 'DELETE';
+                $this->method = 'DELETE';
             elseif($_SERVER['HTTP_X_HTTP_METHOD'] === 'PUT'):
-                $this->requestMethod = 'PUT';
+                $this->method = 'PUT';
             else:
                 throw new Exception('Unexpected Header');
             endif;
         endif;
+    }
+
+    /**
+     * Set Uri
+     *
+     * Setea la uri a la que se realizo la request,
+     * teniendo en cuenta el path relativo de siervo
+     * para poder trabar en subdirectorios.
+     *
+     */
+    private function setUri(){
+        $this->uri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(Siervo::$_rPATH));
+    }
+
+    /**
+     * Set Headers
+     *
+     * Setea las cabeceras de la request en
+     * un array de la siguiente forma
+     * 'opcion de cabecera' => 'valor'.
+     *
+     */
+    private function setHeaders(){
+        $this->headers = apache_request_headers();
     }
 }

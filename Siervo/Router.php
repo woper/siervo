@@ -127,10 +127,10 @@ class Router {
      * request especifico.
      *
      * @param $requestMethod
-     * @return bool
+     * @return array()
      */
     public function getRoutes($requestMethod){
-        $result = false;
+        $result = array();
         if(array_key_exists($requestMethod, $this->routes)):
             $result = $this->routes[$requestMethod];
         endif;
