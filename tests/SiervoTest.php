@@ -77,4 +77,11 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('Siervo\Router', $this->app->delete(function(){return null;}));
         $this->assertFalse($this->app->delete());
     }
+
+    public function testNotFoud(){
+        $this->app->notFound('hola');
+        $this->assertFalse($this->app->notFoundCallback);
+        $this->app->notFound(function(){return null;});
+        $this->assertNull(call_user_func($this->app->notFoundCallback));
+    }
 }

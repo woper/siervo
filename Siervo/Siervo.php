@@ -39,6 +39,11 @@ class Siervo{
     private $request;
 
     /**
+     * @var callback|boolean
+     */
+    public $notFoundCallback;
+
+    /**
      * @var array() Contiene los distintos
      * entornos registrados (key) y su
      * comportamiento asociado mediante callback (value).
@@ -251,5 +256,17 @@ class Siervo{
                 require $fileDir;
             endif;
         });
+    }
+
+    /**
+     * Not Found
+     *
+     * Registra el comportamiento para cuando no
+     * se encuentra la ruta requerida.
+     *
+     * @param $callback
+     */
+    public function notFound($callback){
+        is_callable($callback) ? $this->notFoundCallback = $callback : $this->notFoundCallback = false;
     }
 }
