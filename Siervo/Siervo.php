@@ -50,7 +50,7 @@ class Siervo{
         $this->setEnv();
         $this->setPath();
         $this->setRPath();
-        $this->router = new Router();
+        $this->router = new Router($this);
     }
 
     /**

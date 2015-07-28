@@ -22,6 +22,20 @@ class Router {
     private $routes;
 
     /**
+     * @var Siervo
+     */
+    private $app;
+
+    /**
+     * Constructor
+     *
+     * @param Siervo $siervo
+     */
+    public function __construct(Siervo $siervo){
+        $this->app = $siervo;
+    }
+
+    /**
      * Route
      *
      * Registra una ruta para encadenar más de
