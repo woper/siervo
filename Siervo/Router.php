@@ -150,4 +150,78 @@ class Router {
         endif;
         return $result;
     }
+
+    /**
+     * Process
+     *
+     * Procesa la request pasada por la app, y
+     * retorna dependiendo del comportamiento
+     * asociado a la route.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function process(Request $request){
+        return $this->find($request->getUriArray(), $this->getRoutes($request->getMethod()));
+    }
+
+    /**
+     * Find
+     *
+     * Busca en las rutas registradas la que corresponde
+     * con la requestUri, luego le indica a la app si se
+     * encontro o no para que esta ejecute el comportamiento
+     * asociado, retorna de acuerdo al comportamiento
+     * asociado.
+     *
+     * @param array $requestUriArray
+     * @param array $routes
+     * @return mixed
+     */
+    public function find($requestUriArray = array(), $routes = array()){
+        $args = array();
+        $notFound = true;
+        $callback = null;
+        foreach ($routes as $route => $callback):
+            $route = explode('/', $route);
+            $args = array();
+            $notFound = true;
+            if(count($requestUriArray) === count($route)):
+                $args = $this->match($requestUriArray, $route);
+                if($args !== null):
+                    $notFound = false;
+                    break;
+                endif;
+            endif;
+        endforeach;
+        if($notFound):
+            return $this->app->dispatch($this->app->notFoundCallback);
+        else:
+            return $this->app->dispatch($callback, $args);
+        endif;
+    }
+
+    /**
+     * Match
+     *
+     * Se encarga de comprobar que una ruta registrada
+     * machee de manera correcta con la requestUri
+     * teniendo en cuenta sus parámetros.
+     *
+     * @param $requestUriArray
+     * @param $route
+     * @return array|null
+     */
+    public function match($requestUriArray, $route){
+        $args = array();
+        foreach($requestUriArray as $i => $part):
+            if(substr($route[$i], 0, 1) === ':'):
+                $args[] = $part;
+            elseif($part !== $route[$i]):
+                $args = null;
+                break;
+            endif;
+        endforeach;
+        return $args;
+    }
 }

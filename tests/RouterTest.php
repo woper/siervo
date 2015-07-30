@@ -65,4 +65,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('/', $this->router->getRoutes('DELETE'));
         $this->assertEmpty($this->router->getRoutes('TEST'));
     }
+
+    public function testProcess(){
+        $this->router->get('/', function(){return true;});
+        $request = $this->getMockBuilder('Siervo\Request')->disableOriginalConstructor()->getMock();
+        $this->assertNull($this->router->process($request));
+
+    }
+
+    public function testMatch(){
+        $this->assertNull($this->router->match(array('', 'maxi', 'maxi'), array('', 'maxi', 'tarara')));
+        $this->assertNotNull($this->router->match(array('', 'maxi', 'maxi'), array('', 'maxi', 'maxi')));
+        $this->assertNotNull($this->router->match(array('', 'maxi', 'maxi'), array('', 'maxi', ':name')));
+    }
 }

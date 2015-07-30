@@ -66,34 +66,7 @@ class Siervo{
      */
     public function run(){
         $this->request = new Request();
-        $routes = $this->router->getRoutes($this->request->getMethod());
-        $requestUriArray = $this->request->getUriArray();
-        $notFound = false;
-        foreach($routes as $route => $callback):
-            $route = explode('/', $route);
-            $urlsMatch = true;
-            $notFound = false;
-            $args = array();
-            if(count($route) === count($requestUriArray)):
-                foreach($requestUriArray as $i => $part):
-                    if(substr($route[$i], 0, 1) === ':'):
-                        $args[] = $part;
-                    elseif($part !== $route[$i]):
-                        $urlsMatch = false;
-                        break;
-                    endif;
-                endforeach;
-                if($urlsMatch):
-                    $callback->bindTo($this, __CLASS__);
-                    call_user_func_array($callback, $args);
-                    $notFound = true;
-                    break;
-                endif;
-            endif;
-        endforeach;
-        if(!$notFound):
-            echo 'No se encontro la url solicitada..';
-        endif;
+        return $this->router->process($this->request);
     }
 
     /**
@@ -268,5 +241,39 @@ class Siervo{
      */
     public function notFound($callback){
         is_callable($callback) ? $this->notFoundCallback = $callback : $this->notFoundCallback = false;
+    }
+
+    /**
+     * Dispatch
+     *
+     * Asocia la funcion anonima y la ejecuta
+     * pasandole los parámetros, en caso de
+     * tenerlos.
+     *
+     * @param $callback
+     * @param array $args
+     * @return mixed
+     */
+    public function dispatch($callback, $args = array()){
+        if(is_callable($callback)):
+            $callback->bindTo($this, __CLASS__);
+            return call_user_func_array($callback, $args);
+        else:
+            # Proximamente un response 404, usando el Objeto Response.
+            //header("HTTP/1.0 404 Not Found");
+            //http_response_code(404);
+            throw new \RuntimeException();
+        endif;
+    }
+
+    /**
+     * Get Request
+     *
+     * Retorna la request contenida por siervo.
+     *
+     * @return Request
+     */
+    public function getRequest(){
+        return $this->request;
     }
 }

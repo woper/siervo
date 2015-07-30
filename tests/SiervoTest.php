@@ -84,4 +84,21 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
         $this->app->notFound(function(){return null;});
         $this->assertNull(call_user_func($this->app->notFoundCallback));
     }
+
+    public function testDispatch(){
+        $this->assertTrue($this->app->dispatch(function(){return true;}));
+        $app = $this->app;
+        $this->assertInstanceOf('Siervo\Siervo', $this->app->dispatch(function() use ($app) {return $app;}));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testDispatchException(){
+        $this->app->dispatch('jojojo');
+    }
+
+    public function testGetRequest(){
+        $this->assertNull($this->app->getRequest());
+    }
 }
