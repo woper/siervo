@@ -256,6 +256,9 @@ class Siervo{
      */
     public function dispatch($callback, $args = array()){
         if(is_callable($callback)):
+            if($callback === $this->notFoundCallback):
+                # ver si el hay creado un objeto response, si no setearlo a 404.
+            endif;
             $callback->bindTo($this, __CLASS__);
             return call_user_func_array($callback, $args);
         else:
