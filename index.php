@@ -4,7 +4,14 @@ require "Siervo/Siervo.php";
 Siervo::registerAutoload();
 $app = new Siervo();
 
+$app->notFound(function() use ($app){
+    $response = new \Siervo\Response();
+    $response->statusCode(404);
+    $response->header("Content-Type: text/html; charset=UTF-8");
+    echo "Ups, la dirección: {$app->getRequest()->getUri()} no existe";
+});
 
+$app->get('', function(){echo "ja!";});
 $app->get('/', function(){echo "Hola Mundo!";});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
 $app->get('/hola/:name', function($name){echo "Hola {$name}!";});
