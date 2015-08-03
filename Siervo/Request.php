@@ -114,11 +114,16 @@ class Request {
      *
      * Setea la uri a la que se realizo la request,
      * teniendo en cuenta el path relativo de siervo
-     * para poder trabar en subdirectorios.
+     * para poder trabajar en subdirectorios.
      *
      */
     private function setUri(){
         $this->uri = substr(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), strlen(Siervo::$_rPATH));
+        if($this->uri === false):
+            $this->uri = '/';
+        elseif(Siervo::$_rPATH == '/'):
+            $this->uri = "/{$this->uri}";
+        endif;
     }
 
     /**
