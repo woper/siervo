@@ -11,6 +11,16 @@ namespace tests;
 use Siervo\Request;
 use Siervo\Siervo;
 
+/**
+ * Class RequestTest
+ *
+ * Estos tests estan fallando porque debo crear globales
+ * que representen a $_SERVER['REQUEST_METHOD'],
+ * $_SERVER['HTTP_X_HTTP_METHOD'], $_SERVER['REQUEST_URI'] y creo
+ * que apache_request_headers(), de esta última no estoy muy seguro.
+ *
+ * @package tests
+ */
 class RequestTest extends \PHPUnit_Framework_TestCase {
 
     /**
@@ -21,5 +31,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
     public function setUp(){
         Siervo::registerAutoload();
         $this->request = new Request();
+    }
+
+    public function testAddArgs(){
+        $this->request->addArgs(array('jojojo' => true));
+        $this->assertTrue($this->request->jojojo);
     }
 }

@@ -39,6 +39,11 @@ class Siervo{
     private $request;
 
     /**
+     * @var Response
+     */
+    private $response;
+
+    /**
      * @var callback|boolean
      */
     public $notFoundCallback;
@@ -50,6 +55,10 @@ class Siervo{
      */
     private $environments;
 
+    /**
+     * Constructor
+     *
+     */
     public function __construct(){
         $this->setDefaultEnv();
         $this->setEnv();
@@ -251,32 +260,17 @@ class Siervo{
      * tenerlos.
      *
      * @param $callback
-     * @param array $args
      * @return mixed
      */
-    public function dispatch($callback, $args = array()){
+    public function dispatch($callback){
         if(is_callable($callback)):
+            $this->response = new Response();
             if($callback === $this->notFoundCallback):
-                # ver si el hay creado un objeto response, si no setearlo a 404.
+                $this->response->statusCode(404);
             endif;
-            $callback->bindTo($this, __CLASS__);
-            return call_user_func_array($callback, $args);
+            return $callback($this->request, $this->response);
         else:
-            # Proximamente un response 404, usando el Objeto Response.
-            //header("HTTP/1.0 404 Not Found");
-            //http_response_code(404);
             throw new \RuntimeException();
         endif;
-    }
-
-    /**
-     * Get Request
-     *
-     * Retorna la request contenida por siervo.
-     *
-     * @return Request
-     */
-    public function getRequest(){
-        return $this->request;
     }
 }

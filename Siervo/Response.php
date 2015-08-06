@@ -12,6 +12,18 @@ namespace Siervo;
 class Response {
 
     /**
+     * Constructor
+     *
+     * Se le puede pasar de manera opcional el
+     * código de estado de la respuesta.
+     *
+     * @param int $statusCode
+     */
+    public function __construct($statusCode = 200){
+        $this->statusCode($statusCode);
+    }
+
+    /**
      * Status Code
      *
      * Indica el código de estado de la respuesta

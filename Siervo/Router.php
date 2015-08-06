@@ -162,7 +162,7 @@ class Router {
      * @return mixed
      */
     public function process(Request $request){
-        return $this->find($request->getUriArray(), $this->getRoutes($request->getMethod()));
+        return $this->find($request, $this->getRoutes($request->getMethod()));
     }
 
     /**
@@ -174,14 +174,15 @@ class Router {
      * asociado, retorna de acuerdo al comportamiento
      * asociado.
      *
-     * @param array $requestUriArray
+     * @param Request $request
      * @param array $routes
      * @return mixed
      */
-    public function find($requestUriArray = array(), $routes = array()){
+    public function find(Request $request, $routes = array()){
         $args = array();
         $notFound = true;
         $callback = null;
+        $requestUriArray = $request->getUriArray();
         foreach ($routes as $route => $callback):
             $route = explode('/', $route);
             $args = array();
@@ -197,7 +198,8 @@ class Router {
         if($notFound):
             return $this->app->dispatch($this->app->notFoundCallback);
         else:
-            return $this->app->dispatch($callback, $args);
+            $request->addArgs($args);
+            return $this->app->dispatch($callback);
         endif;
     }
 
@@ -216,7 +218,7 @@ class Router {
         $args = array();
         foreach($requestUriArray as $i => $part):
             if(substr($route[$i], 0, 1) === ':'):
-                $args[] = $part;
+                $args[ltrim($route[$i], ':')] = $part;
             elseif($part !== $route[$i]):
                 $args = null;
                 break;

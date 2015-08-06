@@ -137,4 +137,20 @@ class Request {
     private function setHeaders(){
         $this->headers = apache_request_headers();
     }
+
+    /**
+     * Add Args
+     *
+     * Agrega a la request los parámetros
+     * que pueden venir en la requestUri.
+     *
+     * @param array $args
+     */
+    public function addArgs($args = array()){
+        if(!empty($args)):
+            foreach ($args as $arg => $value):
+                $this->$arg = $value;
+            endforeach;
+        endif;
+    }
 }
