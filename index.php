@@ -27,8 +27,18 @@ $app->route('/hola/:name/como/:inter/:juju/:uno/ok/:mas')
     ->delete(function($req, $resp){
         echo "DELETE: name: {$req->name}, inter: {$req->inter}, juju: {$req->juju}, uno: {$req->uno} y mas: {$req->mas}";
     });
-$app->post('/post', function(){echo "POST";});
-$app->put('/put', function(){echo "PUT";});
+$app->post('/post', function($req){
+    echo "POST: ";
+    var_dump($req->_POST);
+});
+$app->put('/put', function($req, $resp){
+    echo "PUT: ";
+    var_dump($req->_INPUT);
+});
 $app->delete('/delete', function(){echo "DELETE";});
+$app->get('/get', function($req){
+    echo "GET: ";
+    var_dump($req->_GET);
+});
 
 $app->run();

@@ -28,6 +28,21 @@ class Request {
     private $headers;
 
     /**
+     * @var array()
+     */
+    public $_GET;
+
+    /**
+     * @var array()
+     */
+    public $_POST;
+
+    /**
+     * @var array()
+     */
+    public $_INPUT;
+    
+    /**
      * Constructor
      *
      */
@@ -35,8 +50,42 @@ class Request {
         $this->setUri();
         $this->setMethod();
         $this->setHeaders();
+        $this->set_INPUT();
+        $this->set_GET();
+        $this->set_POST();
     }
 
+    /**
+     * Set _PUT
+     *
+     * Convierte en array al flujo de entrada
+     * php://input y lo pone a disposición en el
+     * array $_INPUT de un objeto Request.
+     */
+    private function set_INPUT(){
+        parse_str(file_get_contents("php://input"), $this->_INPUT);
+    }
+
+    /**
+     * Set _GET
+     *
+     * Copia la superglobal $_GET a la
+     * propiedad $_GET de un objeto Request.
+     */
+    private function set_GET(){
+        $this->_GET = $_GET;
+    }
+
+    /**
+     * Set _POST
+     *
+     * Copia la superglobal $_POST a la
+     * propiedad $_POST de un objeto Request.
+     */
+    private function set_POST(){
+        $this->_POST = $_POST;
+    }
+    
     /**
      * Get Method
      *
