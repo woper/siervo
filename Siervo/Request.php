@@ -30,17 +30,22 @@ class Request {
     /**
      * @var array()
      */
-    public $_GET;
+    public $get;
 
     /**
      * @var array()
      */
-    public $_POST;
+    public $post;
 
     /**
      * @var array()
      */
-    public $_INPUT;
+    public $input;
+
+    /**
+     * @var array()
+     */
+    public $files;
     
     /**
      * Constructor
@@ -50,9 +55,14 @@ class Request {
         $this->setUri();
         $this->setMethod();
         $this->setHeaders();
-        $this->set_INPUT();
-        $this->set_GET();
-        $this->set_POST();
+        $this->setGlobals();
+    }
+
+    private function setGlobals(){
+        $this->setInput();
+        $this->setGet();
+        $this->setPost();
+        $this->setFiles();
     }
 
     /**
@@ -60,30 +70,40 @@ class Request {
      *
      * Convierte en array al flujo de entrada
      * php://input y lo pone a disposición en el
-     * array $_INPUT de un objeto Request.
+     * array $input de un objeto Request.
      */
-    private function set_INPUT(){
-        parse_str(file_get_contents("php://input"), $this->_INPUT);
+    private function setInput(){
+        parse_str(file_get_contents("php://input"), $this->input);
     }
 
     /**
      * Set _GET
      *
      * Copia la superglobal $_GET a la
-     * propiedad $_GET de un objeto Request.
+     * propiedad $get de un objeto Request.
      */
-    private function set_GET(){
-        $this->_GET = $_GET;
+    private function setGet(){
+        $this->get = $_GET;
     }
 
     /**
      * Set _POST
      *
      * Copia la superglobal $_POST a la
-     * propiedad $_POST de un objeto Request.
+     * propiedad $post de un objeto Request.
      */
-    private function set_POST(){
-        $this->_POST = $_POST;
+    private function setPost(){
+        $this->post = $_POST;
+    }
+
+    /**
+     * Set Files
+     *
+     * Copia la superglobal $_FILES a la
+     * propiedad $file de un objeto Request.
+     */
+    private function setFiles(){
+        $this->files = $_FILES;
     }
     
     /**
