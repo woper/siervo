@@ -1,4 +1,5 @@
 <?php
+use Siervo\Request;
 use Siervo\Siervo;
 require "Siervo/Siervo.php";
 Siervo::registerAutoload();
@@ -29,16 +30,16 @@ $app->route('/hola/:name/como/:inter/:juju/:uno/ok/:mas')
     });
 $app->post('/post', function($req){
     echo "POST: ";
-    var_dump($req->_POST);
+    var_dump($_POST);
 });
 $app->put('/put', function($req, $resp){
     echo "PUT: ";
-    var_dump($req->_INPUT);
+    var_dump($req->input);
 });
 $app->delete('/delete', function(){echo "DELETE";});
-$app->get('/get', function($req){
+$app->get('/get', function(Request $req){
     echo "GET: ";
-    var_dump($req->_GET);
+    var_dump($_GET);
 });
 
 $app->run();

@@ -30,22 +30,7 @@ class Request {
     /**
      * @var array()
      */
-    public $get;
-
-    /**
-     * @var array()
-     */
-    public $post;
-
-    /**
-     * @var array()
-     */
-    public $input;
-
-    /**
-     * @var array()
-     */
-    public $files;
+    private $_input;
     
     /**
      * Constructor
@@ -60,50 +45,71 @@ class Request {
 
     private function setGlobals(){
         $this->setInput();
-        $this->setGet();
-        $this->setPost();
-        $this->setFiles();
     }
 
     /**
-     * Set _PUT
+     * Set Input
      *
      * Convierte en array al flujo de entrada
      * php://input y lo pone a disposición en el
      * array $input de un objeto Request.
      */
     private function setInput(){
-        parse_str(file_get_contents("php://input"), $this->input);
+        parse_str(file_get_contents("php://input"), $this->_input);
     }
 
     /**
-     * Set _GET
+     * Input
      *
-     * Copia la superglobal $_GET a la
-     * propiedad $get de un objeto Request.
+     * Retorna el valor del parámetro pasado,
+     * alojado en la propiedad privada $_input
+     * que contiene el flujo de entrada si el
+     * reuqest method fue PUT.
+     *
+     * @param $name
+     * @return mixed
      */
-    private function setGet(){
-        $this->get = $_GET;
+    public function input($name){
+        return (isset($this->_input)) ? $this->_input[$name] : $this->_input;
     }
 
     /**
-     * Set _POST
+     * Get
      *
-     * Copia la superglobal $_POST a la
-     * propiedad $post de un objeto Request.
+     * Retorna el valor del parámetro pasado,
+     * alojado en la superglobal $_GET.
+     *
+     * @param $name
+     * @return mixed
      */
-    private function setPost(){
-        $this->post = $_POST;
+    public function get($name){
+        return $_GET[$name];
     }
 
     /**
-     * Set Files
+     * Post
      *
-     * Copia la superglobal $_FILES a la
-     * propiedad $file de un objeto Request.
+     * Retorna el valor del parámetro pasado,
+     * alojado en la superglobal $_POST.
+     *
+     * @param $name
+     * @return mixed
      */
-    private function setFiles(){
-        $this->files = $_FILES;
+    public function post($name){
+        return $_POST[$name];
+    }
+
+    /**
+     * Files
+     *
+     * Retorna el valor del parámetro pasado,
+     * alojado en la superglobal $_FILES.
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function files($name){
+        return $_FILES[$name];
     }
     
     /**
@@ -172,6 +178,7 @@ class Request {
                 $this->method = 'DELETE';
             elseif($_SERVER['HTTP_X_HTTP_METHOD'] === 'PUT'):
                 $this->method = 'PUT';
+                $this->setInput();
             else:
                 throw new Exception('Unexpected Header');
             endif;
