@@ -13,7 +13,8 @@ $app->notFound(function($req, $resp){
 $app->get('', function(){echo "ja!";});
 $app->get('/', function(){echo "Hola Mundo!";});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
-$app->get('/hola/:name', function($req, $resp){echo "Hola {$req->name}!";});
+$app->get('/hola/:name',
+    [function($req, $resp, $next){echo "Hola1 {$req->name}!";$next();}, function($req, $resp){echo "Hola2 {$req->name}!";}]);
 $app->get('/hola/:name/como/:inter', function($req, $resp){echo "Hola {$req->name}, como {$req->inter}!";});
 $app->route('/hola/:name/como/:inter/:juju/:uno/ok/:mas')
     ->get(function($req, $resp){

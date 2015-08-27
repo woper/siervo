@@ -56,6 +56,12 @@ class Siervo{
     private $environments;
 
     /**
+     * @var array() Contiene las callbacks,
+     * funciones anónimas.
+     */
+    private $callbackStack;
+
+    /**
      * Constructor
      *
      */
@@ -65,6 +71,7 @@ class Siervo{
         $this->setPath();
         $this->setRPath();
         $this->router = new Router($this);
+        $this->callbackStack = array();
     }
 
     /**
@@ -255,22 +262,55 @@ class Siervo{
     /**
      * Dispatch
      *
-     * Asocia la funcion anonima y la ejecuta
-     * pasandole los parámetros, en caso de
-     * tenerlos.
+     * Ejecuta la función anónima
+     * pasandole los objetos Request, Response y
+     * la callback next() para darle contexto.
      *
-     * @param $callback
+     * @param null $callback
      * @return mixed
      */
-    public function dispatch($callback){
+    public function dispatch($callback = null){
+        $this->setCallbackStack($callback);
+        $callback = array_shift($this->callbackStack);
         if(is_callable($callback)):
             $this->response = new Response();
             if($callback === $this->notFoundCallback):
                 $this->response->statusCode(404);
             endif;
-            return $callback($this->request, $this->response);
+            return $callback($this->request, $this->response, $this->next());
         else:
             throw new \RuntimeException();
         endif;
+    }
+
+    /**
+     * Set Callback Stack
+     *
+     * Setea la pila de callbacks a ejecutar.
+     *
+     * @param $callback
+     */
+    private function setCallbackStack($callback){
+        if(isset($callback)){
+            if(is_array($callback)):
+                $this->callbackStack = array_merge($this->callbackStack, $callback);
+            else:
+                $this->callbackStack[] = $callback;
+            endif;
+        }
+    }
+
+    /**
+     * Next
+     *
+     * Retorna una callback que al ejecutarla,
+     * se ejecuta la próxima callback registrada.
+     *
+     * @return callable
+     */
+    private function next(){
+        return function(){
+            return $this->dispatch();
+        };
     }
 }

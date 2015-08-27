@@ -102,5 +102,10 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
      */
     public function testDispatchException(){
         $this->app->dispatch('jojojo');
+        $this->app->dispatch([function($rq, $rs, $next){$next();}, function($rq, $rs, $next){$next();}]);
+    }
+
+    public function testDispatchArray(){
+        $this->assertTrue($this->app->dispatch([function($rq, $rs, $next){return $next();}, function(){return true;}]));
     }
 }
