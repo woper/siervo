@@ -313,4 +313,20 @@ class Siervo{
             return $this->dispatch();
         };
     }
+
+    /**
+     * Uso
+     *
+     * Actua como capa middleware,
+     * agregando funciones anonimas en
+     * callbackStack, para que cuando la
+     * ruta haga match, antes de ejecutarse
+     * el comportamiento asociado, se ejecute
+     * toodo lo que esta en callbackStack.
+     *
+     * @param $callback
+     */
+    public function uso($callback){
+        $this->setCallbackStack($callback);
+    }
 }

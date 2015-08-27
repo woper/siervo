@@ -108,4 +108,23 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
     public function testDispatchArray(){
         $this->assertTrue($this->app->dispatch([function($rq, $rs, $next){return $next();}, function(){return true;}]));
     }
+
+    public function testUso(){
+        $this->app->uso(function(){
+            return true;
+        });
+        $this->assertTrue($this->app->dispatch());
+    }
+
+    public function testUsoMultiple(){
+        $this->app->uso(function($rq, $rs, $next){return $next();});
+        $this->app->uso(function(){return true;});
+        $this->assertTrue($this->app->dispatch());
+    }
+
+    public function testUsoBreak(){
+        $this->app->uso(function($rq, $rs, $next){return true;});
+        $this->app->uso(function($rq, $rs, $next){$next();});
+        $this->assertTrue($this->app->dispatch());
+    }
 }
