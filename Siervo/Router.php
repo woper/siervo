@@ -33,6 +33,7 @@ class Router {
      */
     public function __construct(Siervo $siervo){
         $this->app = $siervo;
+        $this->routes = array();
     }
 
     /**
