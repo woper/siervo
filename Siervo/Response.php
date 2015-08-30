@@ -12,6 +12,11 @@ namespace Siervo;
 class Response {
 
     /**
+     * @var string
+     */
+    public $body;
+
+    /**
      * Constructor
      *
      * Se le puede pasar de manera opcional el
