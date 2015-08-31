@@ -197,7 +197,10 @@ class Router {
             endif;
         endforeach;
         if($notFound):
-            return $this->app->dispatch($this->app->notFoundCallback);
+            $callback = (array_key_exists('*', $routes))
+                ? $routes['*'] :
+                $this->app->notFoundCallback;
+            return $this->app->dispatch($callback);
         else:
             $request->addArgs($args);
             return $this->app->dispatch($callback);

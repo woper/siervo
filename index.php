@@ -24,7 +24,9 @@ $app
     echo "Segundo voy yo<br>";
     $next();
 });*/
-
+$app->get('*', function(){
+    echo "soy un comodin";
+});
 $app->get('', function(){echo "ja!";});
 $app->get('/', function(){echo "Hola Mundo!";});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
