@@ -52,7 +52,7 @@ $app->post('/post', function($req){
 });
 $app->put('/put', function($req, $resp){
     echo "PUT: ";
-    var_dump($req->input);
+    var_dump($req->body);
 });
 $app->delete('/delete', function(){echo "DELETE";});
 $app->get('/get', function(Request $req){

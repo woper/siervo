@@ -28,14 +28,14 @@ class Request {
     private $headers;
 
     /**
-     * @var array()
-     */
-    private $_input;
-
-    /**
      * @var \stdClass
      */
     public $param;
+
+    /**
+     * @var mixed
+     */
+    public $body;
     
     /**
      * Constructor
@@ -45,7 +45,7 @@ class Request {
         $this->setUri();
         $this->setMethod();
         $this->setHeaders();
-        $this->setInput();
+        $this->setBody();
         $this->createParam();
     }
 
@@ -62,29 +62,15 @@ class Request {
     }
 
     /**
-     * Set Input
+     * Set Body
      *
-     * Convierte en array al flujo de entrada
-     * php://input y lo pone a disposición en el
-     * array $input de un objeto Request.
+     * Setea el flujo de entrada
+     * php://input y lo pone a disposición
+     * en la propiedad body de un objeto Request.
+     *
      */
-    private function setInput(){
-        parse_str(file_get_contents("php://input"), $this->_input);
-    }
-
-    /**
-     * Input
-     *
-     * Retorna el valor del parámetro pasado,
-     * alojado en la propiedad privada $_input
-     * que contiene el flujo de entrada si el
-     * reuqest method fue PUT.
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function input($name){
-        return (isset($this->_input)) ? $this->_input[$name] : $this->_input;
+    private function setBody(){
+        $this->body = file_get_contents("php://input");
     }
 
     /**
@@ -192,7 +178,6 @@ class Request {
                 $this->method = 'DELETE';
             elseif($_SERVER['HTTP_X_HTTP_METHOD'] === 'PUT'):
                 $this->method = 'PUT';
-                $this->setInput();
             else:
                 throw new Exception('Unexpected Header');
             endif;
