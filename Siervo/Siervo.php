@@ -325,8 +325,10 @@ class Siervo{
      * toodo lo que esta en callbackStack.
      *
      * @param $callback
+     * @return $this
      */
     public function uso($callback){
         $this->setCallbackStack($callback);
+        return $this;
     }
 }

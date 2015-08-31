@@ -10,15 +10,20 @@ $app->notFound(function($req, $resp){
     echo "Ups, la dirección: {$req->getUri()} no existe";
 });
 
-$app->uso(function($req, $res, $next){
+$app
+    ->uso(function($req, $res, $next){
     echo "Primero voy yo<br>";
     $next();
-});
-
-$app->uso(function($req, $res, $next){
+})
+    ->uso(function($req, $res, $next){
     echo "Segundo voy yo<br>";
     $next();
 });
+
+/*$app->uso(function($req, $res, $next){
+    echo "Segundo voy yo<br>";
+    $next();
+});*/
 
 $app->get('', function(){echo "ja!";});
 $app->get('/', function(){echo "Hola Mundo!";});

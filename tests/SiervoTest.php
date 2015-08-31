@@ -127,4 +127,8 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
         $this->app->uso(function($rq, $rs, $next){$next();});
         $this->assertTrue($this->app->dispatch());
     }
+
+    public function testUsoReturn(){
+        $this->assertInstanceOf('Siervo\Siervo', $this->app->uso(function(){return true;}));
+    }
 }
