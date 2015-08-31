@@ -49,6 +49,14 @@ class Request {
         $this->createParam();
     }
 
+    /**
+     * Create Param
+     *
+     * Crea un objeto del tipo stdClass para
+     * alojar como propiedades los parametros
+     * que vienen en la uri.
+     *
+     */
     private function createParam(){
         $this->param = new \stdClass();
     }
