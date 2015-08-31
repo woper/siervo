@@ -31,20 +31,20 @@ $app->get('', function(){echo "ja!";});
 $app->get('/', function(){echo "Hola Mundo!";});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
 $app->get('/hola/:name',
-    [function($req, $resp, $next){echo "Hola1 {$req->name}!";$next();}, function($req, $resp){echo "Hola2 {$req->name}!";}]);
-$app->get('/hola/:name/como/:inter', function($req, $resp){echo "Hola {$req->name}, como {$req->inter}!";});
+    [function($req, $resp, $next){echo "Hola1 {$req->param->name}!";$next();}, function($req, $resp){echo "Hola2 {$req->param->name}!";}]);
+$app->get('/hola/:name/como/:inter', function($req, $resp){echo "Hola {$req->param->name}, como {$req->param->inter}!";});
 $app->route('/hola/:name/como/:inter/:juju/:uno/ok/:mas')
     ->get(function($req, $resp){
-        echo "GET: name: {$req->name}, inter: {$req->inter}, juju: {$req->juju}, uno: {$req->uno} y mas: {$req->mas}";
+        echo "GET: name: {$req->param->name}, inter: {$req->param->inter}, juju: {$req->param->juju}, uno: {$req->param->uno} y mas: {$req->param->mas}";
     })
     ->post(function($req, $resp){
-        echo "POST: name: {$req->name}, inter: {$req->inter}, juju: {$req->juju}, uno: {$req->uno} y mas: {$req->mas}";
+        echo "POST: name: {$req->param->name}, inter: {$req->param->inter}, juju: {$req->param->juju}, uno: {$req->param->uno} y mas: {$req->param->mas}";
     })
     ->put(function($req, $resp){
-        echo "PUT: name: {$req->name}, inter: {$req->inter}, juju: {$req->juju}, uno: {$req->uno} y mas: {$req->mas}";
+        echo "PUT: name: {$req->param->name}, inter: {$req->param->inter}, juju: {$req->param->juju}, uno: {$req->param->uno} y mas: {$req->param->mas}";
     })
     ->delete(function($req, $resp){
-        echo "DELETE: name: {$req->name}, inter: {$req->inter}, juju: {$req->juju}, uno: {$req->uno} y mas: {$req->mas}";
+        echo "DELETE: name: {$req->param->name}, inter: {$req->param->inter}, juju: {$req->param->juju}, uno: {$req->param->uno} y mas: {$req->param->mas}";
     });
 $app->post('/post', function($req){
     echo "POST: ";

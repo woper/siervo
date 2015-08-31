@@ -31,6 +31,11 @@ class Request {
      * @var array()
      */
     private $_input;
+
+    /**
+     * @var \stdClass
+     */
+    public $param;
     
     /**
      * Constructor
@@ -40,11 +45,12 @@ class Request {
         $this->setUri();
         $this->setMethod();
         $this->setHeaders();
-        $this->setGlobals();
+        $this->setInput();
+        $this->createParam();
     }
 
-    private function setGlobals(){
-        $this->setInput();
+    private function createParam(){
+        $this->param = new \stdClass();
     }
 
     /**
@@ -225,7 +231,7 @@ class Request {
     public function addArgs($args = array()){
         if(!empty($args)):
             foreach ($args as $arg => $value):
-                $this->$arg = $value;
+                $this->param->$arg = $value;
             endforeach;
         endif;
     }
