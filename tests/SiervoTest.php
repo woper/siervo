@@ -11,7 +11,7 @@ namespace tests;
 use PHPUnit_Framework_TestCase;
 use \Siervo\Siervo;
 
-require_once 'Siervo/Siervo.php';
+require_once 'src/Siervo/Siervo.php';
 
 class SiervoTest extends PHPUnit_Framework_TestCase {
 

@@ -1,7 +1,7 @@
 <?php
 use Siervo\Request;
 use Siervo\Siervo;
-require "Siervo/Siervo.php";
+require "src/Siervo/Siervo.php";
 Siervo::registerAutoload();
 $app = new Siervo();
 
