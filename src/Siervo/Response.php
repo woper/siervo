@@ -47,8 +47,27 @@ class Response {
      * de php.
      *
      * @param $str
+     * @param bool $replace
      */
-    public function header($str){
-        header($str);
+    public function header($str, $replace = true){
+        header($str, $replace);
+    }
+
+    /**
+     * Redirect
+     *
+     * Redirecciona a la ruta pasada como
+     * parámetro, si se quiere redireccionar
+     * a otra web, fuera de la app, se debe
+     * pasar la url completa (https://www.example.com)
+     * y el parámetro outside se debe pasar como true.
+     *
+     * @param $route
+     * @param bool $outside
+     */
+    public function redirect($route, $outside = false){
+        $this->statusCode(302);
+        $route = ($outside) ? $route : Siervo::$_rPATH.$route;
+        $this->header('Location: '.$route);
     }
 }
