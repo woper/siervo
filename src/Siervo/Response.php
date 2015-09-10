@@ -70,4 +70,19 @@ class Response {
         $route = ($outside) ? $route : Siervo::$_rPATH.$route;
         $this->header('Location: '.$route);
     }
+
+    /**
+     * JSON
+     *
+     * Responde JSON, seteando
+     * Content-Type: application/json y
+     * pasando por json_encode lo que se
+     * le pasa por parámetro.
+     *
+     * @param string $data
+     */
+    public function json($data = ''){
+        $this->header('Content-Type: application/json');
+        echo json_encode($data);
+    }
 }
