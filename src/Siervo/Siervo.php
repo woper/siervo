@@ -14,6 +14,11 @@ namespace Siervo;
 class Siervo{
 
     /**
+     * @var Siervo
+     */
+    private static $instance;
+
+    /**
      * @var string path absoluto donde se encuentra Siervo.
      */
     public static $_PATH;
@@ -62,10 +67,38 @@ class Siervo{
     private $callbackStack;
 
     /**
+     * Get Instance
+     *
+     * Retorna una instancia de
+     * Siervo.
+     *
+     * @return Siervo
+     */
+    public static function getInstance(){
+        if(!isset(self::$instance)){
+            $clase = __CLASS__;
+            self::$instance = new $clase;
+        }
+        return self::$instance;
+    }
+
+    /**
+     * __clone
+     *
+     * Para que no se puedan crear nuevos
+     * objetos por medio de la clonación.
+     *
+     * @return null
+     */
+    private function __clone(){
+        return null;
+    }
+
+    /**
      * Constructor
      *
      */
-    public function __construct(){
+    private function __construct(){
         $this->setDefaultEnv();
         $this->setEnv();
         $this->setPath();

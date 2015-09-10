@@ -3,7 +3,7 @@ use Siervo\Request;
 use Siervo\Siervo;
 require "src/Siervo/Siervo.php";
 Siervo::registerAutoload();
-$app = new Siervo();
+$app = Siervo::getInstance();
 
 $app->notFound(function($req, $resp){
     $resp->header("Content-Type: text/html; charset=UTF-8");
