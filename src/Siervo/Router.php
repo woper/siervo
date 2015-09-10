@@ -34,6 +34,7 @@ class Router {
     public function __construct(Siervo $siervo){
         $this->app = $siervo;
         $this->routes = array();
+        $this->currentRoute = '';
     }
 
     /**
@@ -56,7 +57,7 @@ class Router {
      * Registra una ruta y un comportamiento para esa ruta
      * cuando el request method es GET.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
     public function get(){
         return $this->addRoute(func_get_args(), 'GET');
@@ -68,7 +69,7 @@ class Router {
      * Registra una ruta y un comportamiento para esa ruta
      * cuando el request method es POST.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
     public function post(){
         return $this->addRoute(func_get_args(), 'POST');
@@ -80,7 +81,7 @@ class Router {
      * Registra una ruta y un comportamiento para esa ruta
      * cuando el request method es PUT.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
     public function put(){
         return $this->addRoute(func_get_args(), 'PUT');
@@ -92,7 +93,7 @@ class Router {
      * Registra una ruta y un comportamiento para esa ruta
      * cuando el request method es DELETE.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
     public function delete(){
         return $this->addRoute(func_get_args(), 'DELETE');
@@ -105,7 +106,7 @@ class Router {
      *
      * @param $args
      * @param $requestMethod
-     * @return $this|null
+     * @return boolean|Router
      */
     private function addRoute($args, $requestMethod){
         switch(count($args)):
@@ -114,7 +115,7 @@ class Router {
                 return $this;
             case 2:
                 $this->setArrayRoute($args[0], $args[1], $requestMethod);
-                return null;
+                return true;
             default:
                 return false;
         endswitch;

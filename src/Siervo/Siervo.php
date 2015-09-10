@@ -217,10 +217,10 @@ class Siervo{
      * una ruta y un comportamiento para esa ruta
      * cuando el request method es GET.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
 	public function get(){
-		return call_user_func_array(array($this->router, 'get'), func_get_args());
+		return (count(func_get_args()) === 1) ? false : call_user_func_array(array($this->router, 'get'), func_get_args());
 	}
 
     /**
@@ -230,10 +230,10 @@ class Siervo{
      * una ruta y un comportamiento para esa ruta
      * cuando el request method es POST.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
 	public function post(){
-		return call_user_func_array(array($this->router, 'post'), func_get_args());
+		return (count(func_get_args()) === 1) ? false : call_user_func_array(array($this->router, 'post'), func_get_args());
 	}
 
     /**
@@ -243,10 +243,10 @@ class Siervo{
      * una ruta y un comportamiento para esa ruta
      * cuando el request method es PUT.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
 	public function put(){
-		return call_user_func_array(array($this->router, 'put'), func_get_args());
+		return (count(func_get_args()) === 1) ? false : call_user_func_array(array($this->router, 'put'), func_get_args());
 	}
 
     /**
@@ -256,10 +256,10 @@ class Siervo{
      * una ruta y un comportamiento para esa ruta
      * cuando el request method es DELETE.
      *
-     * @return $this|null|Siervo
+     * @return boolean|Router
      */
 	public function delete(){
-		return call_user_func_array(array($this->router, 'delete'), func_get_args());
+		return (count(func_get_args()) === 1) ? false : call_user_func_array(array($this->router, 'delete'), func_get_args());
 	}
 
     /**

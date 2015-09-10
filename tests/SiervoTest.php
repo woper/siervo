@@ -55,26 +55,26 @@ class SiervoTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGet(){
-        $this->assertNull($this->app->get('/', function(){return null;}));
-        $this->assertInstanceOf('Siervo\Router', $this->app->get(function(){return null;}));
+        $this->assertTrue($this->app->get('/', function(){return null;}));
+        $this->assertFalse($this->app->get(function(){return null;}));
         $this->assertFalse($this->app->get());
     }
 
     public function testPost(){
-        $this->assertNull($this->app->post('/', function(){return null;}));
-        $this->assertInstanceOf('Siervo\Router', $this->app->post(function(){return null;}));
+        $this->assertTrue($this->app->post('/', function(){return null;}));
+        $this->assertFalse($this->app->post(function(){return null;}));
         $this->assertFalse($this->app->post());
     }
 
     public function testPut(){
-        $this->assertNull($this->app->put('/', function(){return null;}));
-        $this->assertInstanceOf('Siervo\Router', $this->app->put(function(){return null;}));
+        $this->assertTrue($this->app->put('/', function(){return null;}));
+        $this->assertFalse($this->app->put(function(){return null;}));
         $this->assertFalse($this->app->put());
     }
 
     public function testDelete(){
-        $this->assertNull($this->app->delete('/', function(){return null;}));
-        $this->assertInstanceOf('Siervo\Router', $this->app->delete(function(){return null;}));
+        $this->assertTrue($this->app->delete('/', function(){return null;}));
+        $this->assertFalse($this->app->delete(function(){return null;}));
         $this->assertFalse($this->app->delete());
     }
 
