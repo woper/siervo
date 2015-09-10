@@ -85,4 +85,19 @@ class Response {
         $this->header('Content-Type: application/json');
         echo json_encode($data);
     }
+
+    /**
+     * Send File
+     *
+     * Responde con el contenido del
+     * archivo cuyo path se pasa como
+     * parámetro, la búsqueda de dicho
+     * archivo se realiza desde el
+     * include path definido en php.
+     *
+     * @param string $path
+     */
+    public function sendFile($path = ''){
+        echo file_get_contents($path, FILE_USE_INCLUDE_PATH);
+    }
 }
