@@ -11,6 +11,11 @@ namespace Siervo;
 class Router {
 
     /**
+     * @var Router
+     */
+    private static $instance;
+
+    /**
      * @var string ruta actual a la que se le
      * esta asociando comportamiento.
      */
@@ -31,11 +36,43 @@ class Router {
      *
      * @param Siervo $siervo
      */
-    public function __construct(Siervo $siervo){
-        $this->app = $siervo;
+    private function __construct(Siervo $siervo = null){
+        if($siervo){
+            $this->app = $siervo;
+        }
         $this->routes = array();
         $this->currentRoute = '';
     }
+
+    /**
+     * Get Instance
+     *
+     * Retorna una instancia de
+     * Siervo.
+     *
+     * @return Router
+     */
+    public static function getInstance(){
+        if(!isset(self::$instance)){
+            $clase = __CLASS__;
+            if(func_num_args() === 1){
+                self::$instance = new $clase(func_get_arg(0));
+            }else{
+                self::$instance = new $clase;
+            }
+        }
+        return self::$instance;
+    }
+
+    /**
+     * __clone
+     *
+     * Para que no se puedan crear nuevos
+     * objetos por medio de la clonación.
+     *
+     * @return void
+     */
+    private function __clone(){}
 
     /**
      * Route

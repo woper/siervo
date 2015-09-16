@@ -22,7 +22,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp(){
         Siervo::registerAutoload();
-        $this->router = new Router($this->getMockBuilder('Siervo\Siervo')->disableOriginalConstructor()->getMock());
+        $this->router = Router::getInstance($this->getMockBuilder('Siervo\Siervo')->disableOriginalConstructor()->getMock());
     }
 
     public function testRoute(){

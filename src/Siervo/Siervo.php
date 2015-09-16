@@ -88,11 +88,9 @@ class Siervo{
      * Para que no se puedan crear nuevos
      * objetos por medio de la clonación.
      *
-     * @return null
+     * @return void
      */
-    private function __clone(){
-        return null;
-    }
+    private function __clone(){}
 
     /**
      * Constructor
@@ -103,7 +101,7 @@ class Siervo{
         $this->setEnv();
         $this->setPath();
         $this->setRPath();
-        $this->router = new Router($this);
+        $this->router = Router::getInstance($this);
         $this->callbackStack = array();
     }
 
