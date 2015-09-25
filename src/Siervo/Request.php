@@ -1,14 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: max
- * Date: 27/07/15
- * Time: 17:42
- */
 
 namespace Siervo;
-
 use Exception;
+
+/**
+ * Class Request
+ *
+ * @author Maxi Nivoli <m_nivoli@hotmail.com>
+ * @package Siervo
+ */
 
 class Request {
 

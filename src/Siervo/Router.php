@@ -1,12 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: max
- * Date: 23/07/15
- * Time: 18:04
- */
 
 namespace Siervo;
+
+/**
+ * Class Router
+ *
+ * @author Maxi Nivoli <m_nivoli@hotmail.com>
+ * @package Siervo
+ */
 
 class Router {
 

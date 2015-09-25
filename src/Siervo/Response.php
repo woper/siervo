@@ -1,13 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: max
- * Date: 27/07/15
- * Time: 19:21
- */
 
 namespace Siervo;
 
+/**
+ * Class Response
+ *
+ * @author Maxi Nivoli <m_nivoli@hotmail.com>
+ * @package Siervo
+ */
 
 class Response {
 

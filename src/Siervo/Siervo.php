@@ -1,14 +1,13 @@
 <?php
 
-/**
- * Siervo
- *
- * User: max
- * Date: 19/07/2015
- * Time: 20:30
- */
-
 namespace Siervo;
+
+/**
+ * Class Siervo
+ *
+ * @author Maxi Nivoli <m_nivoli@hotmail.com>
+ * @package Siervo
+ */
 
 
 class Siervo{
@@ -266,15 +265,23 @@ class Siervo{
      * Registra la función de autoload de siervo,
      * si se siguen ciertos lineamientos también
      * puede servir para importar de forma automática
-     * archivos creados por el usuario.
+     * archivos creados por el usuario, en caso de que
+     * los archivos del usuario no esten en el mismo
+     * directorio que Siervo se puede pasar un array
+     * con los distintos directorios donde se pueden
+     * encontrar.
      *
      */
-    public static function registerAutoload(){
-        spl_autoload_register(function($class){
-            $fileDir = dirname(__DIR__)."/".str_replace('\\', '/', $class).'.php';
-            if($fileDir):
-                require $fileDir;
-            endif;
+    public static function registerAutoload($dirs = array()){
+        spl_autoload_register(function($class) use ($dirs){
+            $dirs[] = dirname(__DIR__);
+            foreach ($dirs as $dir) {
+                $fileDir = $dir."/".str_replace('\\', '/', $class).'.php';
+                if(file_exists($fileDir)){
+                    require $fileDir;
+                    break;
+                }
+            }
         });
     }
 
