@@ -101,6 +101,7 @@ class Siervo{
         $this->setPath();
         $this->setRPath();
         $this->router = Router::getInstance($this);
+        $this->response = new Response();
         $this->callbackStack = array();
     }
 
@@ -311,7 +312,6 @@ class Siervo{
         $this->setCallbackStack($callback);
         $callback = array_shift($this->callbackStack);
         if(is_callable($callback)):
-            $this->response = new Response();
             if($callback === $this->notFoundCallback):
                 $this->response->statusCode(404);
             endif;
