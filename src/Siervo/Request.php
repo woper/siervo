@@ -137,6 +137,20 @@ class Request {
     }
 
     /**
+     * getHeader
+     *
+     * Retorna el valor del campo de
+     * cabecera request pasado como
+     * parametro.
+     *
+     * @param $field
+     * @return mixed | string
+     */
+    public function getHeader($field){
+        return $this->headers[$field];
+    }
+
+    /**
      * Get Uri
      *
      * Retorna la uri a la que se le realizo la

@@ -28,7 +28,10 @@ $app->get('*', function(){
     echo "soy un comodin";
 });
 $app->get('', function(){echo "ja!";});
-$app->get('/', function(){echo "Hola Mundo!";});
+$app->get('/', function(Request $req){
+    echo "Hola Mundo!<br>";
+    echo $req->getHeader('Host');
+});
 $app->get('/jaba', function(){echo "Hola Jaba!";});
 $app->get('/hola/:name',
     [function($req, $resp, $next){echo "Hola1 {$req->param->name}!";$next();}, function($req, $resp){echo "Hola2 {$req->param->name}!";}]);
