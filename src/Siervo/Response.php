@@ -57,16 +57,19 @@ class Response {
      * Redirect
      *
      * Redirecciona a la ruta pasada como
-     * parámetro, si se quiere redireccionar
+     * parámetro, si no se pasa un codigo de
+     * estado de respuesta el mismo es por
+     * defecto 302, si se quiere redireccionar
      * a otra web, fuera de la app, se debe
      * pasar la url completa (https://www.example.com)
      * y el parámetro outside se debe pasar como true.
      *
      * @param $route
+     * @param int $statusCode
      * @param bool $outside
      */
-    public function redirect($route, $outside = false){
-        $this->statusCode(302);
+    public function redirect($route, $statusCode = 302, $outside = false){
+        $this->statusCode($statusCode);
         $route = ($outside) ? $route : Siervo::$_rPATH.$route;
         $this->header('Location: '.$route);
     }
