@@ -103,4 +103,17 @@ class Response {
     public function sendFile($path = ''){
         echo file_get_contents($path, FILE_USE_INCLUDE_PATH);
     }
+
+    /**
+     * send
+     *
+     * Responde haciendo echo de
+     * la variable que se le pasa
+     * como parámetro.
+     *
+     * @param string $str
+     */
+    public function send($str = ''){
+        echo $str;
+    }
 }
