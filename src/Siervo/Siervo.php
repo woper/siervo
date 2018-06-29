@@ -204,7 +204,7 @@ class Siervo{
      * @param $route
      * @return $this
      */
-	public function route($route){		
+	public function route($route){
 		return $this->router->route($route);
 	}
 
@@ -317,7 +317,7 @@ class Siervo{
             endif;
             return $callback($this->request, $this->response, $this->next());
         else:
-            throw new \RuntimeException();
+            throw new \RuntimeException("Siervo ERROR: Request for: ".$this->request->getUri());
         endif;
     }
 
