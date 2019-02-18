@@ -187,6 +187,13 @@ class Request {
      */
     private function setMethod(){
         $this->method = $_SERVER['REQUEST_METHOD'];
+
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+          header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+          header('Access-Control-Allow-Credentials: true');
+          header('Access-Control-Max-Age: 86400');    // cache for 1 day
+      }
+
         if(($this->method === 'POST') && (array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))):
             if($_SERVER === 'DELETE'):
                 $this->method = 'DELETE';
@@ -198,11 +205,6 @@ class Request {
         elseif($this->method === "OPTIONS" && (array_key_exists("HTTP_ACCESS_CONTROL_REQUEST_METHOD", $_SERVER))):
             $this->method = $_SERVER["HTTP_ACCESS_CONTROL_REQUEST_METHOD"];
             header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-            if (isset($_SERVER['HTTP_ORIGIN'])) {
-                header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-                header('Access-Control-Allow-Credentials: true');
-                header('Access-Control-Max-Age: 86400');    // cache for 1 day
-            }
             if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
                 header("Access-Control-Allow-Headers:        {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 
